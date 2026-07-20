@@ -130,3 +130,32 @@ FINAL RESULT:
         ▼
    Weather / Notes / Browser / SQL / VS Code
 
+----------------------------------------------------------------- 
+FRIDAY/
+│
+├── app.py                 ← Entry point
+├── config.py              ← Settings
+├── .env                   ← Secrets
+│
+├── brain/
+│   ├── __init__.py
+│   ├── llm.py             ← Ollama se baat
+│   ├── chat.py            ← Chat flow
+│   ├── controller.py      ← Decision maker (Boss)
+│   └── prompt.py          ← System prompt
+│
+├── mcp/
+│   ├── client.py
+│   └── manager.py
+│
+├── memory/
+│
+├── planner/
+│
+├── voice/
+│
+├── vision/
+│
+├── automation/
+│
+└── servers/
