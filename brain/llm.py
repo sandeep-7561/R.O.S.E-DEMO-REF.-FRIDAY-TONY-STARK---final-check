@@ -6,4 +6,21 @@ client = OpenAI(
     api_key="ollama"
 )
 
+def ask_llm(user_message: str):
+    response = client.chat.completions.create(
+     model="qwen3:4b",
+
+     messages=[
+         {
+            "role": "system",
+            "content": SYSTEM_PROMPT
+         },
+         {
+            "role": "user",
+            "content":user_message
+         }
+     ]   
+    )
+
+    return response.choices[0].message.content
 

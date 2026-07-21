@@ -159,3 +159,31 @@ FRIDAY/
 ├── automation/
 │
 └── servers/
+
+
+
+
+now we create brain folder and flow of brain folder:
+
+User
+      │
+      ▼
+ask_llm()
+      │
+      ▼
+SYSTEM_PROMPT add hota hai
+      │
+      ▼
+User Message add hota hai
+      │
+      ▼
+Ollama
+      │
+      ▼
+Qwen3 Sochta hai
+      │
+      ▼
+Response
+      │
+      ▼
+Sirf Content return
