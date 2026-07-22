@@ -1,23 +1,23 @@
 from brain.llm import ask_llm
+from brain.history import (
+    get_messages,
+    add_user,
+    add_assistant
+)
 
+print("ROSE Assistant Started!\n")
 
-def main():
+while True:
 
-    print("ROSE Assistant Started!")
-    print("Type 'exit' to quit.\n")
+    user = input("You : ")
 
-    while True:
+    if user.lower() == "exit":
+        break
 
-        user_message = input("You : ")
+    add_user(user)
 
-        if user_message.lower() == "exit":
-            print("ROSE : Goodbye")
-            break
+    answer = ask_llm(get_messages())
 
-        response = ask_llm(user_message)
+    print(f"ROSE : {answer}")
 
-        print(f"ROSE : {response}")
-
-
-if __name__ == "__main__":
-    main()
+    add_assistant(answer)
