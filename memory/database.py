@@ -20,3 +20,48 @@ CREATE TABLE IF NOT EXISTS memory(
 """)
 
 connection.commit()
+
+
+def save_memory(key, value):
+
+    cursor.execute(
+        """
+        INSERT OR REPLACE INTO memory(key, value)
+        VALUES(?, ?)
+        """,
+        (key, value)
+    )
+
+    connection.commit()
+
+
+def get_memory(key):
+
+    cursor.execute(
+        """
+        SELECT value
+        FROM memory
+        WHERE key = ?
+        """,
+        (key,)
+    )
+
+    result = cursor.fetchone()
+
+    if result:
+        return result[0]
+
+    return None
+
+
+def delete_memory(key):
+
+    cursor.execute(
+        """
+        DELETE FROM memory
+        WHERE key = ?
+        """,
+        (key,)
+    )
+
+    connection.commit()
