@@ -1,56 +1,81 @@
-import re
+import asyncio
 
-from brain.llm import ask_llm
-from brain.history import (
-    get_messages,
-    add_user,
-    add_assistant
+from dotenv import load_dotenv
+
+from livekit.agents import (
+    Agent,
+    AgentSession,
+    JobContext,
+    WorkerOptions,
+    cli,
+    AutoSubscribe,
 )
 
-from memory.database import (
-    save_memory,
-    get_memory
-)
+from livekit.plugins import openai, deepgram, silero
 
-print("ROSE Assistant Started!\n")
+from brain.prompt import SYSTEM_PROMPT
 
-while True:
+load_dotenv()
 
-    user = input("You : ")
 
-    if user.lower() == "exit":
-        break
+class RoseAgent(Agent):
 
-    # ---------- MEMORY SAVE ----------
+    def __init__(self):
 
-    match = re.search(
-        r"my name is (.+)",
-        user,
-        re.IGNORECASE
+        super().__init__(
+            instructions=SYSTEM_PROMPT
+        )
+
+
+async def entrypoint(ctx: JobContext):
+
+    await ctx.connect(
+        auto_subscribe=AutoSubscribe.AUDIO_ONLY
     )
 
-    if match:
+    session = AgentSession(
 
-        name = match.group(1).strip()
+        vad=silero.VAD.load(),
 
-        save_memory("name", name)
+        stt=deepgram.STT(),
 
-    # ---------- MEMORY READ ----------
+        llm=openai.LLM.with_ollama(
 
-    if user.lower() == "what is my name?":
+            model="qwen3:4b",
 
-        name = get_memory("name")
+            base_url="http://localhost:11434/v1",
 
-        if name:
+        ),
 
-            print(f"ROSE : Your name is {name}")
+        tts=openai.TTS(),
+    )
 
-            continue
+    await session.start(
 
-    add_user(user)
+        room=ctx.room,
 
-    answer = ask_llm(get_messages())
+        agent=RoseAgent(),
+    )
 
-    print(f"ROSE : {answer}")
+    print("ROSE Started...")
 
-    add_assistant(answer)
+    await session.generate_reply(
+
+        instructions="Introduce yourself."
+    )
+
+    while True:
+        await asyncio.sleep(1)
+
+
+if __name__ == "__main__":
+
+    cli.run_app(
+
+        WorkerOptions(
+
+            entrypoint_fnc=entrypoint
+
+        )
+
+    )
