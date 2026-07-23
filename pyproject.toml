@@ -5,11 +5,15 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11.8"
 dependencies = [
+    "faster-whisper>=1.2.1",
     "livekit-agents>=1.6.6",
     "livekit-api>=1.2.0",
     "livekit-plugins-openai>=1.6.6",
     "livekit-plugins-silero>=1.6.6",
+    "numpy>=2.4.6",
     "ollama>=0.6.2",
     "python-dotenv>=1.2.2",
+    "scipy>=1.17.1",
+    "sounddevice>=0.5.5",
     "uvicorn>=0.51.0",
 ]
